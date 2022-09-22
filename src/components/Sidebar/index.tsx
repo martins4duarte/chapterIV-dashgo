@@ -1,38 +1,35 @@
-import { Box, Icon, Link, Stack, Text } from "@chakra-ui/react";
-import { RiDashboardLine, RiContactsLine } from 'react-icons/ri';
+import { Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, useBreakpointValue } from "@chakra-ui/react";
+import { useSidebarDrawer } from "../hooks/SidebarDrawerContext";
+import SidebarNav from "./SidebarNav";
 
 export function Sidebar() {
-  return(
-    <Box as="aside" w="64" mr="8">
-      <Stack spacing="12" align="flex-start">
-        <Box>
-          <Text fontWeight="bold" color="gray.400" fontSize="small">GERAL</Text>
-          <Stack spacing="4" mt="8" align="stretch">
-            <Link display="flex" alignItems="center">
-              <Icon as={RiDashboardLine} size="20"/>
-              <Text ml="4" fontWeight="medium">Dashboard</Text>
-            </Link>
-            <Link display="flex" alignItems="center">
-              <Icon as={RiContactsLine} size="20"/>
-              <Text ml="4" fontWeight="medium">Usuários</Text>
-            </Link>
-          </Stack>
-        </Box>
+  const {isOpen, onClose } = useSidebarDrawer();
 
-        <Box>
-          <Text fontWeight="bold" color="gray.400" fontSize="small">AUTOMAÇÃO</Text>
-          <Stack spacing="4" mt="8" align="stretch">
-            <Link display="flex" alignItems="center">
-              <Icon as={RiDashboardLine} size="20"/>
-              <Text ml="4" fontWeight="medium">Formulários</Text>
-            </Link>
-            <Link display="flex" alignItems="center">
-              <Icon as={RiContactsLine} size="20"/>
-              <Text ml="4" fontWeight="medium">Automação</Text>
-            </Link>
-          </Stack>
-        </Box>
-      </Stack>
+  const isDrawerSidebar = useBreakpointValue({
+    base: true,
+    lg: false
+  })
+
+  if(isDrawerSidebar){
+    return (
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+        <DrawerOverlay>
+          <DrawerContent bg="gray.800" p="5">
+            <DrawerCloseButton mt="6" p="5"/>
+            <DrawerHeader>Navegação</DrawerHeader>
+
+            <DrawerBody>
+              <SidebarNav />
+            </DrawerBody>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
+    )
+  }
+  
+  return (
+    <Box as="aside" w="64" mr="8">
+      <SidebarNav />
     </Box>
   );
 }
